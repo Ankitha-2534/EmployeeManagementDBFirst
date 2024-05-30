@@ -1,0 +1,19 @@
+﻿################################################################################
+# This .gitignore file was automatically created by Microsoft(R) Visual Studio.
+################################################################################
+
+/BusinessLogicLayer/bin/Debug/net8.0
+/BusinessLogicLayer/obj
+/DataAccessLayer/bin/Debug/net8.0
+/DataAccessLayer/obj
+/DomainModelLayer/bin/Debug/net8.0
+/DomainModelLayer/obj
+/EFDBFirstEmployee/.vs
+/EFDBFirstEmployee/bin/Debug/net8.0
+/EFDBFirstEmployee/obj
+/InfrastructureLayer/bin/Debug/net8.0
+/InfrastructureLayer/obj
+/PresentationLayer/bin/Debug/net8.0
+/PresentationLayer/obj
+/PresentationServiceLayer/bin/Debug/net8.0
+/PresentationServiceLayer/obj
