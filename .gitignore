@@ -17,3 +17,5 @@
 /PresentationLayer/obj
 /PresentationServiceLayer/bin/Debug/net8.0
 /PresentationServiceLayer/obj
+/EMS.EFDBFirstEmployee.Test/bin/Debug/net8.0
+/EMS.EFDBFirstEmployee.Test/obj
