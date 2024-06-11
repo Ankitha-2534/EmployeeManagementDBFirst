@@ -3,19 +3,21 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.8.34330.188
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EFDBFirstEmployee", "EFDBFirstEmployee.csproj", "{45D324E2-E38F-4AD4-A424-E3854CB63ABA}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EFDBFirstEmployee", "EFDBFirstEmployee.csproj", "{45D324E2-E38F-4AD4-A424-E3854CB63ABA}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BusinessLogicLayer", "..\BusinessLogicLayer\BusinessLogicLayer.csproj", "{C5E18EC0-159F-4B6E-8D41-9C3AB651942B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BusinessLogicLayer", "..\BusinessLogicLayer\BusinessLogicLayer.csproj", "{C5E18EC0-159F-4B6E-8D41-9C3AB651942B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DataAccessLayer", "..\DataAccessLayer\DataAccessLayer.csproj", "{3E65144E-7467-401F-8F1E-8AE8244F3077}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DataAccessLayer", "..\DataAccessLayer\DataAccessLayer.csproj", "{3E65144E-7467-401F-8F1E-8AE8244F3077}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DomainModelLayer", "..\DomainModelLayer\DomainModelLayer.csproj", "{916DBFA8-A90F-46BF-9B90-5224CA4BBFF0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "DomainModelLayer", "..\DomainModelLayer\DomainModelLayer.csproj", "{916DBFA8-A90F-46BF-9B90-5224CA4BBFF0}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InfrastructureLayer", "..\InfrastructureLayer\InfrastructureLayer.csproj", "{95E10A19-A6DD-4F70-ACFE-BE536F88289B}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InfrastructureLayer", "..\InfrastructureLayer\InfrastructureLayer.csproj", "{95E10A19-A6DD-4F70-ACFE-BE536F88289B}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationLayer", "..\PresentationLayer\PresentationLayer.csproj", "{CCE34992-EB56-436D-BDBE-35C7596FF655}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationLayer", "..\PresentationLayer\PresentationLayer.csproj", "{CCE34992-EB56-436D-BDBE-35C7596FF655}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PresentationServiceLayer", "..\PresentationServiceLayer\PresentationServiceLayer.csproj", "{9AD896DF-9767-4657-8D96-7B856D7CCB9E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PresentationServiceLayer", "..\PresentationServiceLayer\PresentationServiceLayer.csproj", "{9AD896DF-9767-4657-8D96-7B856D7CCB9E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "EMS.EFDBFirstEmployee.Test", "..\EMS.EFDBFirstEmployee.Test\EMS.EFDBFirstEmployee.Test.csproj", "{692A07D0-4E6F-4D60-9199-919AF2419616}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -51,6 +53,10 @@ Global
 		{9AD896DF-9767-4657-8D96-7B856D7CCB9E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{9AD896DF-9767-4657-8D96-7B856D7CCB9E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{9AD896DF-9767-4657-8D96-7B856D7CCB9E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{692A07D0-4E6F-4D60-9199-919AF2419616}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{692A07D0-4E6F-4D60-9199-919AF2419616}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{692A07D0-4E6F-4D60-9199-919AF2419616}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{692A07D0-4E6F-4D60-9199-919AF2419616}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

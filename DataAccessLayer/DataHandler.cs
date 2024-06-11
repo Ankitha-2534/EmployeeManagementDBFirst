@@ -4,29 +4,67 @@ using DomainModelLayer.Views;
 
 namespace DataAccessLayer
 {
-    public class DataHandler:IDataHandler
+    public class DataHandler : IDataHandler
     {
-        private readonly IDropDown _dropDown;
-        public DataHandler(IDropDown dropDown)
+        private readonly IRenderOptions _renderOptions;
+        public DataHandler(IRenderOptions renderOptions)
         {
-            _dropDown = dropDown;
+            _renderOptions = renderOptions;
         }
 
         public Employee MapEmployeeViewToEmployee(EmployeeView employeeView)
         {
-            Employee employee = new Employee
+            Employee employee = new Employee();
+            
+            if(employeeView.Uid != null)
             {
-                Uid = employeeView.Uid,
-                FirstName = employeeView.FirstName,
-                LastName = employeeView.LastName,
-                DateOfBirth = employeeView.DateOfBirth,
-                Email = employeeView.Email,
-                MobileNumber = employeeView.MobileNumber,
-                JoinDate = employeeView.JoinDate,
-                RoleId = _dropDown.GetRoleId(employeeView.Department!, employeeView.Location!),
-                ManagerId = _dropDown.GetManager(employeeView.Manager!).Id,
-                ProjectId = _dropDown.GetProject(employeeView.Project!).Id
-            };
+                employee.Uid = employeeView.Uid;
+            }
+            if(employeeView.FirstName != null )
+            {
+                employee.FirstName = employeeView.FirstName;
+            }
+            if(employeeView.LastName != null )
+            {
+                employee.LastName = employeeView.LastName;
+            }
+            if(employeeView.DateOfBirth != null)
+            {
+                employee.DateOfBirth = employeeView.DateOfBirth;
+            }
+            if(employeeView.Email != null )
+            {
+                employee.Email = employeeView.Email;
+            }
+            if(employeeView.MobileNumber != null)
+            {
+                employee.MobileNumber = employeeView.MobileNumber;
+            }
+            if(employeeView.JoinDate != null)
+            {
+                employee.JoinDate = employeeView.JoinDate;
+            }
+            if(employeeView.Department != null && employeeView.JobTitle != null && employeeView.Location != null)
+            {
+                employee.RoleId = _renderOptions.GetRoleId(employeeView.Department, employeeView.Location!, employeeView.JobTitle);
+            }
+            if (employeeView.Manager != null)
+            {
+                var manager = _renderOptions.GetManager(employeeView.Manager);
+                if (manager != null)
+                {
+                    employee.ManagerId = manager.Id;
+                }
+            }
+            if (employeeView.Project != null)
+            {
+                var project = _renderOptions.GetProject(employeeView.Project);
+                if (project != null)
+                {
+                    employee.ProjectId = project.Id;
+                }
+            }
+
             return employee;
         }
 
@@ -41,11 +79,11 @@ namespace DataAccessLayer
                 Email = employee.Email,
                 MobileNumber = employee.MobileNumber,
                 JoinDate = employee.JoinDate,
-                JobTitle = _dropDown.GetRoleFromId((int)employee.RoleId!),
-                Location = _dropDown.GetLocationFromId(),
-                Department = _dropDown.GetDepartmentFromId(),
-                Manager = _dropDown.GetManagerByID((int)employee.ManagerId!)?.Name,
-                Project = _dropDown.GetProjectByID((int)employee.ProjectId!)?.Name
+                Location = _renderOptions.GetLocationByRoleId(employee.RoleId!.Value),
+                Department = _renderOptions.GetDepartmentByRoleId(employee.RoleId!.Value),
+                JobTitle = _renderOptions.GetRoleFromId(employee.RoleId!.Value),
+                Manager = _renderOptions.GetManagerByID((int)employee.ManagerId!)?.Name,
+                Project = _renderOptions.GetProjectByID((int)employee.ProjectId!)?.Name
             };
             return employeeView;
         }

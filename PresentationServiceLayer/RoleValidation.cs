@@ -6,11 +6,11 @@ namespace PresentationServiceLayer
 {
     public class RoleValidation:IRoleValidation
     {
-        private readonly IDropDownOperation _dropDownOperation;
+        private readonly IRenderOptionsOperation _renderOptionsOperation;
 
-        public RoleValidation(IDropDownOperation dropDownOperation)
+        public RoleValidation(IRenderOptionsOperation dropDownOperation)
         {
-            _dropDownOperation = dropDownOperation;
+            _renderOptionsOperation = dropDownOperation;
         }
         public string Validation(string text, string field)
         {
@@ -25,7 +25,7 @@ namespace PresentationServiceLayer
 
         public string ValidateLocation(string userInput, string field)
         {
-            var locations = _dropDownOperation.GetAllLocations();
+            var locations = _renderOptionsOperation.GetAllLocations();
             bool userInputLocation = false;
             while (userInputLocation == false)
             {
@@ -42,9 +42,9 @@ namespace PresentationServiceLayer
             }
             return userInput;
         }
-        public string ValidateDepartment(string userInput, string field)
+        public string ValidateDepartment(string userInput, string field,string location)
         {
-            var departments = _dropDownOperation.GetAllDepartments();
+            var departments = _renderOptionsOperation.GetAllDepartments(location);
             bool userInputDepartment = false;
             while (userInputDepartment == false)
             {

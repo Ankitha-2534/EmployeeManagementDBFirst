@@ -6,20 +6,45 @@ namespace PresentationServiceLayer
 {
     public class EmployeeValidation : IEmployeeValidation
     {
-        private readonly IDropDownOperation _dropDownOperation;
-        public EmployeeValidation(IDropDownOperation dropDownOperation)
+        private readonly IRenderOptionsOperation _renderOptionsOperation;
+        public EmployeeValidation(IRenderOptionsOperation renderOptionsOperation)
         {
-            _dropDownOperation = dropDownOperation;
+            _renderOptionsOperation = renderOptionsOperation;
         }
 
         public string ValidateEmployeeId(string userInput)
         {
             string patternEmpNo = "^TZ\\d{4}$";
-            while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternEmpNo))
+            var UIdList = _renderOptionsOperation.GetAllIds();
+            bool isValid = true;
+            int val = 0,check=0;
+            for (int i = 0; i < UIdList.Count(); i++)
             {
-                Console.WriteLine("Please enter correct Employee Id  : ");
-                userInput = Console.ReadLine()!;
+                if (userInput == UIdList[i].Uid)
+                {
+                    isValid = true;
+                    break;
+                }
             }
+            while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternEmpNo) || isValid==true)
+            {
+                for (int i = 0; i < UIdList.Count(); i++)
+                {
+                    if (userInput == UIdList[i].Uid)
+                    {
+                        Console.WriteLine("Please enter correct Employee Id  : ");
+                        userInput = Console.ReadLine()!;
+                        check++;
+                    }
+                }
+                val++;
+                if (val-check==1)
+                {
+                    isValid = false;
+                    break;
+                }
+            }
+            
             return userInput;
         }
 
@@ -47,7 +72,7 @@ namespace PresentationServiceLayer
 
         public string ValidateLocation(string userInput, string field)
         {
-            var locations = _dropDownOperation.GetAllLocations();
+            var locations = _renderOptionsOperation.GetAllLocations();
             bool userInputLocation = false;
             while (userInputLocation == false)
             {
@@ -66,7 +91,7 @@ namespace PresentationServiceLayer
         }
         public string ValidateManager(string userInput, string field)
         {
-            var managers = _dropDownOperation.GetAllManagers();
+            var managers = _renderOptionsOperation.GetAllManagers();
             bool userInputManager = false;
             while (userInputManager == false)
             {
@@ -86,7 +111,7 @@ namespace PresentationServiceLayer
 
         public string ValidateProject(string userInput, string field)
         {
-            var projects = _dropDownOperation.GetAllProjects();
+            var projects = _renderOptionsOperation.GetAllProjects();
             bool userInputProject = false;
             while (userInputProject == false)
             {
@@ -104,9 +129,9 @@ namespace PresentationServiceLayer
             return userInput;
         }
 
-        public string ValidateRole(string userInput, string field)
+        public string ValidateRole(string userInput, string field,string department,string location)
         {
-            var roles = _dropDownOperation.GetAllRoles();
+            var roles = _renderOptionsOperation.GetAllRoles(department,location);
             bool userInputRole = false;
             while (userInputRole == false)
             {
@@ -125,9 +150,9 @@ namespace PresentationServiceLayer
         }
 
 
-        public string ValidateDepartment(string userInput, string field)
+        public string ValidateDepartment(string userInput, string field,string location)
         {
-            var departments = _dropDownOperation.GetAllDepartments();
+            var departments = _renderOptionsOperation.GetAllDepartments(location);
             bool userInputDepartment = false;
             while (userInputDepartment == false)
             {

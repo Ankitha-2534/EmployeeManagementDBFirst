@@ -1,4 +1,5 @@
 ﻿using BusinessLogicLayer.Interfaces;
+using DomainModelLayer.Models;
 using InfrastructureLayer;
 using PresentationLayer.Interfaces;
 using PresentationServiceLayer.Interfaces;
@@ -10,13 +11,13 @@ namespace PresentationLayer
     {
         private readonly IEmployeeValidation _employeeValidation;
         private readonly IEmployeeOperation _employeeOperation;
-        private readonly IDropDownOperation _dropDownOperation;
+        private readonly IRenderOptionsOperation _renderOptionsOperation;
 
-        public EmployeeUI(IEmployeeValidation employeeValidation, IEmployeeOperation employeeOperation, IDropDownOperation dropDownOperation)
+        public EmployeeUI(IEmployeeValidation employeeValidation, IEmployeeOperation employeeOperation, IRenderOptionsOperation renderOptionsOperation)
         {
             _employeeValidation = employeeValidation;
             _employeeOperation = employeeOperation;
-            _dropDownOperation = dropDownOperation;
+            _renderOptionsOperation = renderOptionsOperation;
         }
         public void Add()
         {
@@ -66,7 +67,7 @@ namespace PresentationLayer
             }
 
             Utility.GetInput("Please Enter Employee Location : ");
-            var locations = _dropDownOperation.GetAllLocations();
+            var locations = _renderOptionsOperation.GetAllLocations();
             for (int i = 0; i < locations.Count; i++)
             {
                 Console.WriteLine(locations[i].Name);
@@ -74,26 +75,26 @@ namespace PresentationLayer
             string location = Console.ReadLine()!;
             location = _employeeValidation.ValidateLocation(location, "Location");
 
-            Utility.GetInput("Please Enter Employee Job Title : ");
-            var roles = _dropDownOperation.GetAllRoles();
-            for (int i = 0; i < roles.Count; i++)
-            {
-                Console.WriteLine($"{roles[i].RoleName}");
-            }
-            string jobTitle = Console.ReadLine()!;
-            jobTitle = _employeeValidation.ValidateRole(jobTitle, "Job Title");
-
             Utility.GetInput("Please Enter Employee Department");
-            var departments = _dropDownOperation.GetAllDepartments();
+            var departments = _renderOptionsOperation.GetAllDepartments(location);
             for (int i = 0; i < departments.Count; i++)
             {
                 Console.WriteLine(departments[i].Name);
             }
             string department = Console.ReadLine()!;
-            department = _employeeValidation.ValidateDepartment(department, "Department");
+            department = _employeeValidation.ValidateDepartment(department, "Department", location);
+
+            Utility.GetInput("Please Enter Employee Job Title : ");
+            var roles = _renderOptionsOperation.GetAllRoles(department,location);
+            for (int i = 0; i < roles.Count; i++)
+            {
+                Console.WriteLine($"{roles[i].RoleName}");
+            }
+            string jobTitle = Console.ReadLine()!;
+            jobTitle = _employeeValidation.ValidateRole(jobTitle, "Job Title",department,location);
 
             Utility.GetInput("Please Enter Employee Manager");
-            var managers = _dropDownOperation.GetAllManagers();
+            var managers = _renderOptionsOperation.GetAllManagers();
             for (int i = 0; i < managers.Count; i++)
             {
                 Console.WriteLine(managers[i].Name);
@@ -105,7 +106,7 @@ namespace PresentationLayer
             }
 
             Utility.GetInput("Please Enter Employee Project");
-            var projects = _dropDownOperation.GetAllProjects();
+            var projects = _renderOptionsOperation.GetAllProjects();
             for (int i = 0; i < projects.Count; i++)
             {
                 Console.WriteLine(projects[i].Name);
@@ -270,21 +271,41 @@ namespace PresentationLayer
                         break;
                     case EditFieldEnum.location:
                         Utility.GetInput("Location");
+                        var locations = _renderOptionsOperation.GetAllLocations();
+                        for (int i = 0; i < locations.Count; i++)
+                        {
+                            Console.WriteLine(locations[i].Name);
+                        }
                         selectedEmployee.Location = Console.ReadLine()!;
                         selectedEmployee.Location = _employeeValidation.ValidateLocation(selectedEmployee.Location, "Location");
                         break;
-                    case EditFieldEnum.jobTitle:
-                        Utility.GetInput("Job Title");
-                        selectedEmployee.JobTitle = Console.ReadLine()!;
-                        selectedEmployee.JobTitle = _employeeValidation.ValidateRole(selectedEmployee.JobTitle, "Job Title");
-                        break;
                     case EditFieldEnum.department:
                         Utility.GetInput("Department");
+                        var departments = _renderOptionsOperation.GetAllDepartments(selectedEmployee.Location);
+                        for (int i = 0; i < departments.Count; i++)
+                        {
+                            Console.WriteLine(departments[i].Name);
+                        }
                         selectedEmployee.Department = Console.ReadLine()!;
-                        selectedEmployee.Department = _employeeValidation.ValidateDepartment(selectedEmployee.Department, "Department");
+                        selectedEmployee.Department = _employeeValidation.ValidateDepartment(selectedEmployee.Department, "Department", selectedEmployee.Location);
                         break;
+                    case EditFieldEnum.jobTitle:
+                        Utility.GetInput("Job Title");
+                        var roles = _renderOptionsOperation.GetAllRoles(selectedEmployee.Department, selectedEmployee.Location);
+                        for (int i = 0; i < roles.Count; i++)
+                        {
+                            Console.WriteLine($"{roles[i].RoleName}");
+                        }
+                        selectedEmployee.JobTitle = Console.ReadLine()!;
+                        selectedEmployee.JobTitle = _employeeValidation.ValidateRole(selectedEmployee.JobTitle, "Job Title", selectedEmployee.Department, selectedEmployee.Location);
+                        break;                    
                     case EditFieldEnum.manager:
                         Utility.GetInput("Manager");
+                        var managers = _renderOptionsOperation.GetAllManagers();
+                        for (int i = 0; i < managers.Count; i++)
+                        {
+                            Console.WriteLine(managers[i].Name);
+                        }
                         selectedEmployee.Manager = Console.ReadLine()!;
                         if (!string.IsNullOrEmpty(selectedEmployee.Manager))
                         {
@@ -293,6 +314,11 @@ namespace PresentationLayer
                         break;
                     case EditFieldEnum.project:
                         Utility.GetInput("Project");
+                        var projects = _renderOptionsOperation.GetAllProjects();
+                        for (int i = 0; i < projects.Count; i++)
+                        {
+                            Console.WriteLine(projects[i].Name);
+                        }
                         selectedEmployee.Project = Console.ReadLine()!;
                         if (!string.IsNullOrEmpty(selectedEmployee.Project))
                         {

@@ -7,11 +7,11 @@ namespace BusinessLogicLayer
     public class RoleOperation:IRoleOperation
     {
         private readonly IRoleRepository _roleRepository;
-        private readonly IDropDown _dropDown;
-        public RoleOperation(IRoleRepository roleRepository,IDropDown dropDown)
+        private readonly IRenderOptions _renderOptions;
+        public RoleOperation(IRoleRepository roleRepository,IRenderOptions renderOptions)
         {
             _roleRepository = roleRepository;
-            _dropDown = dropDown;
+            _renderOptions = renderOptions;
         }
 
         public Role StoreData(string roleName, string department, string description, string location)
@@ -19,9 +19,9 @@ namespace BusinessLogicLayer
             Role role = new Role()
             {
                 RoleName = roleName,
-                DepartmentId = _dropDown.GetDepartment(department)?.Id,
+                DepartmentId = _renderOptions.GetDepartment(department)?.Id,
                 Description = description,
-                LocationId = _dropDown.GetLocation(location)?.Id
+                LocationId = _renderOptions.GetLocation(location)?.Id
 
             };
             return role;

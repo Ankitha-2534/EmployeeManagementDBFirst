@@ -7,28 +7,21 @@ namespace DataAccessLayer
     public class EmployeeRepository : IEmployeeRepository
     {
         private readonly IDataHandler _dataHandler;        
-        private readonly IDropDown _dropDown;
+        private readonly IRenderOptions _renderOptions;
 
-        public EmployeeRepository(IDataHandler dataHandler, IDropDown dropDown)
+        public EmployeeRepository(IDataHandler dataHandler, IRenderOptions renderOptions)
         {
             _dataHandler = dataHandler;
-            _dropDown = dropDown;
+            _renderOptions = renderOptions;
         }
 
         public void Add(EmployeeView emp)
         {
             using (var context = new EmployeeManagementContext())
             {
-                try
-                {
-                    var employee = _dataHandler.MapEmployeeViewToEmployee(emp);
-                    context.Employees.Add(employee);
-                    context.SaveChanges();
-                }
-                catch (Exception e)
-                {
-                    Console.WriteLine(e);
-                }
+                var employee = _dataHandler.MapEmployeeViewToEmployee(emp);
+                context.Employees.Add(employee);
+                context.SaveChanges();
             }
         }
 
@@ -67,9 +60,9 @@ namespace DataAccessLayer
                     existingEmployee.Email = emp.Email;
                     existingEmployee.MobileNumber = emp.MobileNumber;
                     existingEmployee.JoinDate = emp.JoinDate;
-                    existingEmployee.RoleId = _dropDown.GetRoleId(emp.Department, emp.Location);
-                    existingEmployee.ManagerId = _dropDown.GetManager(emp.Manager).Id;
-                    existingEmployee.ProjectId = _dropDown.GetProject(emp.Project).Id;
+                    existingEmployee.RoleId = _renderOptions.GetRoleId(emp.Department, emp.Location, emp.JobTitle);
+                    existingEmployee.ManagerId = _renderOptions.GetManager(emp.Manager).Id;
+                    existingEmployee.ProjectId = _renderOptions.GetProject(emp.Project).Id;
                     context.SaveChanges();
                 }
                 else

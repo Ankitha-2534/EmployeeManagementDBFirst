@@ -8,42 +8,62 @@ using BusinessLogicLayer.Interfaces;
 using DataAccessLayer.Interfaces;
 using PresentationLayer.Interfaces;
 using PresentationServiceLayer.Interfaces;
+using Microsoft.Extensions.DependencyInjection;
 
 namespace EFDBFirstEmployee
 {
     public static class Program
     {
-        private static readonly IDropDownOperation _dropDownOperation;
-        private static readonly IDropDown _dropDown;
-        private static readonly IDataHandler _dataHandler;
-        private static readonly EmployeeManagementContext _context;
-        private static readonly IEmployeeRepository _employeeRepo;
-        private static readonly IRoleRepository _roleRepository;
-        private static readonly IEmployeeOperation _employeeOperation;
-        private static readonly IEmployeeValidation _employeeValidation;
-        private static readonly IEmployeeUI _employeeUi;
-        private static readonly IRoleOperation _roleOperation;
-        private static readonly IRoleValidation _roleValidation;
-        private static readonly IRoleUI _roleUi;
+       
+        //private static readonly IRenderOptionsOperation _renderOptionsOperation;
+        //private static readonly IRenderOptions _renderOptions;
+        //private static readonly IDataHandler _dataHandler;
+        //private static readonly EmployeeManagementContext _context;
+        //private static readonly IEmployeeRepository _employeeRepo;
+        //private static readonly IRoleRepository _roleRepository;
+        //private static readonly IEmployeeOperation _employeeOperation;
+        //private static readonly IEmployeeValidation _employeeValidation;
+        //private static readonly IEmployeeUI _employeeUi;
+        //private static readonly IRoleOperation _roleOperation;
+        //private static readonly IRoleValidation _roleValidation;
+        //private static readonly IRoleUI _roleUi;
 
-        static Program()
-        {
-            _context = new EmployeeManagementContext();
-            _dropDown = new DropDown(_context);
-            _dropDownOperation = new DropDownOperation(_dropDown);
-            _dataHandler = new DataHandler(_dropDown);
-            _employeeRepo = new EmployeeRepository(_dataHandler,_dropDown);
-            _employeeValidation = new EmployeeValidation(_dropDownOperation);
-            _employeeOperation = new EmployeeOperation(_employeeRepo);
-            _roleValidation = new RoleValidation(_dropDownOperation);
-            _employeeUi = new EmployeeUI(_employeeValidation,_employeeOperation, _dropDownOperation);
-            _roleRepository = new RoleRepository(_context);
-            _roleOperation = new RoleOperation(_roleRepository,_dropDown);
-            _roleUi = new RoleUI(_roleOperation!, _roleValidation!,_dropDownOperation); 
-        }
-
+        //static Program()
+        //{
+        //    _context = new EmployeeManagementContext();
+        //    _renderOptions = new RenderOptions(_context);
+        //    _renderOptionsOperation = new RenderOptionsOperation(_renderOptions);
+        //    _dataHandler = new DataHandler(_renderOptions);
+        //    _employeeRepo = new EmployeeRepository(_dataHandler,_renderOptions);
+        //    _employeeValidation = new EmployeeValidation(_renderOptionsOperation);
+        //    _employeeOperation = new EmployeeOperation(_employeeRepo);
+        //    _roleValidation = new RoleValidation(_renderOptionsOperation);
+        //    _employeeUi = new EmployeeUI(_employeeValidation,_employeeOperation, _renderOptionsOperation);
+        //    _roleRepository = new RoleRepository(_context);
+        //    _roleOperation = new RoleOperation(_roleRepository,_renderOptions);
+        //    _roleUi = new RoleUI(_roleOperation!, _roleValidation!,_renderOptionsOperation); 
+        //} 
         static void Main(string[] args)
         {
+            ServiceCollection sc = new ServiceCollection();
+            sc.AddSingleton<IRenderOptionsOperation, RenderOptionsOperation>();
+            sc.AddSingleton<IRenderOptions,RenderOptions>();
+            sc.AddSingleton<IDataHandler, DataHandler>();
+            sc.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+            sc.AddSingleton<IRoleRepository, RoleRepository>();
+            sc.AddSingleton<IEmployeeOperation, EmployeeOperation>();
+            sc.AddSingleton<IEmployeeRepository, EmployeeRepository>();
+            sc.AddSingleton<IEmployeeValidation, EmployeeValidation>();
+            sc.AddSingleton<IEmployeeUI, EmployeeUI>();
+            sc.AddSingleton<IRoleOperation, RoleOperation>();
+            sc.AddSingleton<IRoleValidation, RoleValidation>();
+            sc.AddSingleton<IRoleUI, RoleUI>();
+            sc.AddDbContext<EmployeeManagementContext>();
+
+            ServiceProvider sp = sc.BuildServiceProvider();
+            IEmployeeUI _employeeUi=sp.GetRequiredService<IEmployeeUI>();
+            IRoleUI _roleUi=sp.GetRequiredService<IRoleUI>();
+
             Console.WriteLine("Please choose an option from given below options by entering value");
             Console.WriteLine("1.Employee Management\n2.Role Management\n3.Exit\n");
             string userInput = Console.ReadLine()!;
