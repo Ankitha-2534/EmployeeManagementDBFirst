@@ -1,6 +1,7 @@
 ﻿using BusinessLogicLayer.Interfaces;
 using InfrastructureLayer;
 using PresentationLayer.Interfaces;
+using PresentationServiceLayer;
 using PresentationServiceLayer.Interfaces;
 
 namespace PresentationLayer
@@ -21,8 +22,21 @@ namespace PresentationLayer
         public void Add()
         {
             Utility.GetInput("Please Enter Role Name");
-            string roleName = Console.ReadLine()!;
-            roleName = _roleValidation.Validation(roleName, "Role Name");
+            string roleName = string.Empty;
+            bool isRole = false;
+            while(isRole == false)
+            {
+                try
+                {
+                    roleName = Console.ReadLine()!;
+                    roleName = _roleValidation.Validation(roleName);
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Please enter string that contains only alphabets :");
+                }
+            }
+            
 
             Utility.GetInput("Please Enter Location");
             var locations = _renderOptionsOperation.GetAllLocations();
@@ -30,8 +44,22 @@ namespace PresentationLayer
             {
                 Console.WriteLine(locations[i].Name);
             }
-            string location = Console.ReadLine()!;
-            location = _roleValidation.ValidateLocation(location, "Location");
+            bool isLocation = false;
+            string location = string.Empty;
+            while (isLocation == false)
+            {
+                try
+                {
+                    location = Console.ReadLine()!;
+                    location = _roleValidation.ValidateLocation(location);
+                    isLocation = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("InValid Data");
+                    Console.WriteLine("Please Enter Location from given Options : ");
+                }
+            }
 
             Utility.GetInput("Please Enter Department");
             var departments = _renderOptionsOperation.GetAllDepartments(location);
@@ -39,10 +67,26 @@ namespace PresentationLayer
             {
                 Console.WriteLine(departments[i].Name);
             }
-            string department = Console.ReadLine()!;
-            department = _roleValidation.ValidateDepartment(department, "Department", location);
+            bool isDepartment = false;
+            string department = string.Empty;
+            while (isDepartment == false)
+            {
+                try
+                {
+                    department = Console.ReadLine()!;
+                    department = _roleValidation.ValidateDepartment(department, location);
+                    isDepartment = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("InValid Data");
+                    Console.WriteLine("Please Enter Location from given Options : ");
+                }
+            }
+
             Utility.GetInput("Please Enter Role Description");
             string description = Console.ReadLine()!;
+           
 
             
             _roleoperation.Add(_roleoperation.StoreData(roleName, department, description, location));

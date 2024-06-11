@@ -21,100 +21,280 @@ namespace PresentationLayer
         }
         public void Add()
         {
+            //Employee Id
             Utility.GetInput("Please Enter Employee Id(TZ0000) : ");
-            string employeeId = Console.ReadLine()!;
-            employeeId = _employeeValidation.ValidateEmployeeId(employeeId);
-
-            Utility.GetInput("Please Enter Employee FirstName : ");
-            string firstName = Console.ReadLine()!;
-            firstName = _employeeValidation.ValidateName(firstName, "First Name");
-
-            Utility.GetInput("Please Enter Employee LastName : ");
-            string lastName = Console.ReadLine()!;
-            lastName = _employeeValidation.ValidateName(lastName, "Last Name");
-
-            Utility.GetInput("Please Enter Employee DateOfBirth : ");
-            string dateOfBirthString = Console.ReadLine()!;
-            DateTime currentDate = DateTime.Now;
-            DateTime dateOfBirth;
-            bool isValidDate = DateTime.TryParse(dateOfBirthString, out dateOfBirth);
-            if (!string.IsNullOrEmpty(dateOfBirthString))
+            string employeeId = string.Empty;
+            bool isValid = false;
+            while (isValid == false)
             {
-                if (!isValidDate || currentDate < dateOfBirth)
+                try
                 {
-                    dateOfBirth = _employeeValidation.ValidateDate(isValidDate, dateOfBirth, currentDate);
+                    employeeId = Console.ReadLine()!;
+                    employeeId = _employeeValidation.ValidateEmployeeId(employeeId);
+                    isValid = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Employee Id : ");
+                }
+            }
+            
+            //Employee FirstName
+            Utility.GetInput("Please Enter Employee FirstName : ");
+            string firstName = string.Empty;
+            bool isFirstName = false;
+            while(isFirstName == false)
+            {
+                try
+                {
+                    firstName = Console.ReadLine()!;
+                    firstName = _employeeValidation.ValidateName(firstName);
+                    isFirstName = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter First Name that should contain only Alphabets : ");
+                }
+            }
+            
+            //Employee LastName
+            Utility.GetInput("Please Enter Employee LastName : ");
+            string lastName = string.Empty;
+            bool isLastName = false;
+            while (isLastName == false)
+            {
+                try
+                {
+                    lastName = Console.ReadLine()!;
+                    lastName = _employeeValidation.ValidateName(lastName);
+                    isLastName = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Last Name that should contain only Alphabets : ");
                 }
             }
 
+            //Employee DOB
+            Utility.GetInput("Please Enter Employee DateOfBirth : ");
+            bool isDateValid=false;
+            string dateOfBirthString = string.Empty;
+            DateTime currentDate = DateTime.Now;
+            DateTime dateOfBirth = new DateTime(1900,01,01);
+            while (isDateValid == false)
+            {
+                try
+                {
+                    dateOfBirthString = Console.ReadLine();
+                    bool isValidDate = DateTime.TryParse(dateOfBirthString, out dateOfBirth);
+                    if (!string.IsNullOrEmpty(dateOfBirthString))
+                    {
+                        if (!isValidDate || currentDate < dateOfBirth)
+                        {
+                            dateOfBirth = _employeeValidation.ValidateDate(isValidDate, dateOfBirth, currentDate);
+                        }
+                    }
+                    isDateValid = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("InValid Date");
+                    Console.WriteLine("Please Enter Valid Date : ");
+                }
+            }            
+            
+            //Employee Email
             Utility.GetInput("Please Enter Employee Email : ");
-            string email = Console.ReadLine()!;
-            email = _employeeValidation.ValidateEmail(email);
+            string email = string.Empty;
+            bool isEmailValid = false;
+            while(isEmailValid == false)
+            {
+                try
+                {
+                    email = Console.ReadLine();
+                    email = _employeeValidation.ValidateEmail(email);
+                    isEmailValid = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Email : ");
+                }
+            }
 
+            //Employee MobileNumber
             Utility.GetInput("Please Enter Employee Phone Number : ");
-            string phone = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(phone))
+            string phone = string.Empty;
+            bool isMobileNumber = false;
+            while(isMobileNumber == false)
             {
-                phone = _employeeValidation.ValidateMobileNumber(phone);
+                try
+                {
+                    phone = Console.ReadLine()!;
+                    if (!string.IsNullOrEmpty(phone))
+                    {
+                        phone = _employeeValidation.ValidateMobileNumber(phone);
+                    }
+                    isMobileNumber = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter valid Mobile Number : ");
+                }
             }
 
+            //Employee Join Date
             Utility.GetInput("Please Enter Employee Join Date : ");
-            string joinDateString = Console.ReadLine()!;
-            DateTime joinDate;
-            bool isValidJoinDate = DateTime.TryParse(joinDateString, out joinDate);
-            if (!isValidJoinDate || dateOfBirth > joinDate)
+            string joinDateString = string.Empty;
+            DateTime joinDate = DateTime.Now;
+            bool isJoinDateValid = false;
+            while (isJoinDateValid == false)
             {
-                joinDate = _employeeValidation.ValidateJoinDate(isValidJoinDate, joinDate, dateOfBirth);
+                try
+                {
+                    joinDateString = Console.ReadLine()!;
+                    bool isValidJoinDate = DateTime.TryParse(joinDateString, out joinDate);
+                    if (!isValidJoinDate || dateOfBirth > joinDate)
+                    {
+                        joinDate = _employeeValidation.ValidateJoinDate(isValidJoinDate, joinDate, dateOfBirth);
+                    }
+                    isJoinDateValid = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Join Date : ");
+                }
             }
 
+            //Employee Location
             Utility.GetInput("Please Enter Employee Location : ");
             var locations = _renderOptionsOperation.GetAllLocations();
             for (int i = 0; i < locations.Count; i++)
             {
                 Console.WriteLine(locations[i].Name);
             }
-            string location = Console.ReadLine()!;
-            location = _employeeValidation.ValidateLocation(location, "Location");
-
+            bool isLocation = false;
+            string location = string.Empty;
+            while (isLocation == false)
+            {
+                try
+                {
+                    location = Console.ReadLine()!;
+                    location = _employeeValidation.ValidateLocation(location);
+                    isLocation = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("InValid Data");
+                    Console.WriteLine("Please Enter Location from given Options : ");
+                }
+            }
+            
+            //Employee Department
             Utility.GetInput("Please Enter Employee Department");
             var departments = _renderOptionsOperation.GetAllDepartments(location);
             for (int i = 0; i < departments.Count; i++)
             {
                 Console.WriteLine(departments[i].Name);
             }
-            string department = Console.ReadLine()!;
-            department = _employeeValidation.ValidateDepartment(department, "Department", location);
+            bool isDepartment = false;
+            string department = string.Empty;
+            while (isDepartment == false)
+            {
+                try
+                {
+                    department = Console.ReadLine()!;
+                    department = _employeeValidation.ValidateDepartment(department,location);
+                    isDepartment = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("InValid Data");
+                    Console.WriteLine("Please Enter Location from given Options : ");
+                }
+            }
 
+            //Employee JobTitle
             Utility.GetInput("Please Enter Employee Job Title : ");
             var roles = _renderOptionsOperation.GetAllRoles(department,location);
             for (int i = 0; i < roles.Count; i++)
             {
                 Console.WriteLine($"{roles[i].RoleName}");
             }
-            string jobTitle = Console.ReadLine()!;
-            jobTitle = _employeeValidation.ValidateRole(jobTitle, "Job Title",department,location);
+            bool isRole = false;
+            string jobTitle = string.Empty;
+            while(isRole == false)
+            {
+                try
+                {
+                    jobTitle = Console.ReadLine()!;
+                    jobTitle = _employeeValidation.ValidateRole(jobTitle, department, location);
+                    isRole = true;
+                }
+                catch(Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Role from given options : ");
+                }
+            }
 
+            //Employee Manager
             Utility.GetInput("Please Enter Employee Manager");
             var managers = _renderOptionsOperation.GetAllManagers();
             for (int i = 0; i < managers.Count; i++)
             {
                 Console.WriteLine(managers[i].Name);
-            }
-            string manager = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(manager))
+            }           
+            bool isManager = false;
+            string manager = string.Empty;
+            while (isManager == false)
             {
-                manager = _employeeValidation.ValidateManager(manager, "Manager");
+                try
+                {
+                    manager = Console.ReadLine()!;
+                    if (!string.IsNullOrEmpty(manager))
+                    {
+                        manager = _employeeValidation.ValidateManager(manager);
+                    }
+                    isManager = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Manager Name from given options : ");
+                }
             }
 
+            //Employee Project
             Utility.GetInput("Please Enter Employee Project");
             var projects = _renderOptionsOperation.GetAllProjects();
             for (int i = 0; i < projects.Count; i++)
             {
                 Console.WriteLine(projects[i].Name);
             }
-            string project = Console.ReadLine()!;
-            if (!string.IsNullOrEmpty(project))
+            bool isProject = false;
+            string project = string.Empty;
+            while (isProject == false)
             {
-                project = _employeeValidation.ValidateProject(project, "Project");
+                try
+                {
+                    project = Console.ReadLine()!;
+                    if (!string.IsNullOrEmpty(project))
+                    {
+                        project = _employeeValidation.ValidateProject(project);
+                    }
+                    isProject = true;
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Invalid Data");
+                    Console.WriteLine("Please Enter Valid Project Name from given options : ");
+                }
             }
 
             _employeeOperation.Add(_employeeOperation.StoreData(employeeId, firstName, lastName, dateOfBirth, email, joinDate, location, jobTitle, department, manager, project));
@@ -223,49 +403,133 @@ namespace PresentationLayer
                 {
                     case EditFieldEnum.firstName:
                         Utility.GetInput("FirstName");
-                        selectedEmployee.FirstName = Console.ReadLine()!;
-                        selectedEmployee.FirstName = _employeeValidation.ValidateName(selectedEmployee.FirstName, "First Name");
+                        selectedEmployee.FirstName = string.Empty;
+                        bool isFirstName = false;
+                        while (isFirstName == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.FirstName = Console.ReadLine()!;
+                                selectedEmployee.FirstName = _employeeValidation.ValidateName(selectedEmployee.FirstName);
+                                isFirstName = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter First Name that should contain only Alphabets : ");
+                            }
+                        }
                         break;
                     case EditFieldEnum.lastName:
                         Utility.GetInput("Last Name");
-                        selectedEmployee.LastName = Console.ReadLine()!;
-                        selectedEmployee.LastName = _employeeValidation.ValidateName(selectedEmployee.LastName, "Last Name");
+                        selectedEmployee.LastName = string.Empty;
+                        bool isLastName = false;
+                        while (isLastName == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.LastName = Console.ReadLine()!;
+                                selectedEmployee.LastName = _employeeValidation.ValidateName(selectedEmployee.LastName);
+                                isLastName = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Last Name that should contain only Alphabets : ");
+                            }
+                        }
                         break;
                     case EditFieldEnum.dateOfBirth:
                         Utility.GetInput("Date Of Birth");
-                        string dateOfBirthString = Console.ReadLine()!;
-                        DateTime dateOfBirth;
-                        bool isValidDate = DateTime.TryParse(dateOfBirthString, out dateOfBirth);
-                        if (!string.IsNullOrEmpty(dateOfBirthString))
+                        bool isDateValid = false;
+                        string dateOfBirthString = string.Empty;
+                        DateTime dateOfBirth = new DateTime(1900, 01, 01);
+                        while (isDateValid == false)
                         {
-                            if (!isValidDate || currentDate < dateOfBirth)
+                            try
                             {
-                                dateOfBirth = _employeeValidation.ValidateDate(isValidDate, dateOfBirth, currentDate);
+                                dateOfBirthString = Console.ReadLine();
+                                bool isValidDate = DateTime.TryParse(dateOfBirthString, out dateOfBirth);
+                                if (!string.IsNullOrEmpty(dateOfBirthString))
+                                {
+                                    if (!isValidDate || currentDate < dateOfBirth)
+                                    {
+                                        dateOfBirth = _employeeValidation.ValidateDate(isValidDate, dateOfBirth, currentDate);
+                                    }
+                                }
+                                isDateValid = true;
+                                selectedEmployee.DateOfBirth = dateOfBirth;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("InValid Date");
+                                Console.WriteLine("Please Enter Valid Date : ");
                             }
                         }
-                        selectedEmployee.DateOfBirth = dateOfBirth;
                         break;
                     case EditFieldEnum.email:
                         Utility.GetInput("Email");
-                        selectedEmployee.Email = Console.ReadLine()!;
-                        selectedEmployee.Email = _employeeValidation.ValidateEmail(selectedEmployee.Email);
+                        selectedEmployee.Email = string.Empty;
+                        bool isEmailValid = false;
+                        while (isEmailValid == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.Email = Console.ReadLine();
+                                selectedEmployee.Email = _employeeValidation.ValidateEmail(selectedEmployee.Email);
+                                isEmailValid = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Valid Email : ");
+                            }
+                        }
                         break;
                     case EditFieldEnum.phone:
                         Utility.GetInput("Phone Number");
-                        selectedEmployee.MobileNumber = Console.ReadLine()!;
-                        if (!string.IsNullOrEmpty(selectedEmployee.MobileNumber))
+                        selectedEmployee.MobileNumber = string.Empty;
+                        bool isMobileNumber = false;
+                        while (isMobileNumber == false)
                         {
-                            selectedEmployee.MobileNumber = _employeeValidation.ValidateMobileNumber(selectedEmployee.MobileNumber);
+                            try
+                            {
+                                selectedEmployee.MobileNumber = Console.ReadLine()!;
+                                if (!string.IsNullOrEmpty(selectedEmployee.MobileNumber))
+                                {
+                                    selectedEmployee.MobileNumber = _employeeValidation.ValidateMobileNumber(selectedEmployee.MobileNumber);
+                                }
+                                isMobileNumber = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter valid Mobile Number : ");
+                            }
                         }
                         break;
                     case EditFieldEnum.joinDate:
                         Utility.GetInput("Joining Date");
-                        string joinDateString = Console.ReadLine()!;
-                        DateTime joinDate;
-                        bool isValidJoinDate = DateTime.TryParse(joinDateString, out joinDate);
-                        if (!isValidJoinDate || selectedEmployee.DateOfBirth > joinDate)
+                        string joinDateString = string.Empty;
+                        DateTime joinDate = DateTime.Now;
+                        bool isJoinDateValid = false;
+                        while (isJoinDateValid == false)
                         {
-                            joinDate = _employeeValidation.ValidateJoinDate(isValidJoinDate, joinDate, selectedEmployee.DateOfBirth);
+                            try
+                            {
+                                joinDateString = Console.ReadLine()!;
+                                bool isValidJoinDate = DateTime.TryParse(joinDateString, out joinDate);
+                                if (!isValidJoinDate || selectedEmployee.DateOfBirth > joinDate)
+                                {
+                                    joinDate = _employeeValidation.ValidateJoinDate(isValidJoinDate, joinDate, selectedEmployee.DateOfBirth);
+                                }
+                                isJoinDateValid = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Valid Join Date : ");
+                            }
                         }
                         selectedEmployee.JoinDate = joinDate;
                         break;
@@ -276,8 +540,22 @@ namespace PresentationLayer
                         {
                             Console.WriteLine(locations[i].Name);
                         }
-                        selectedEmployee.Location = Console.ReadLine()!;
-                        selectedEmployee.Location = _employeeValidation.ValidateLocation(selectedEmployee.Location, "Location");
+                        selectedEmployee.Location = string.Empty;
+                        bool isLocation = false;
+                        while (isLocation == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.Location = Console.ReadLine()!;
+                                selectedEmployee.Location = _employeeValidation.ValidateLocation(selectedEmployee.Location);
+                                isLocation = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("InValid Data");
+                                Console.WriteLine("Please Enter Location from given Options : ");
+                            }
+                        }
                         break;
                     case EditFieldEnum.department:
                         Utility.GetInput("Department");
@@ -286,8 +564,22 @@ namespace PresentationLayer
                         {
                             Console.WriteLine(departments[i].Name);
                         }
-                        selectedEmployee.Department = Console.ReadLine()!;
-                        selectedEmployee.Department = _employeeValidation.ValidateDepartment(selectedEmployee.Department, "Department", selectedEmployee.Location);
+                        selectedEmployee.Department = string.Empty;
+                        bool isDepartment = false;
+                        while (isDepartment == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.Department = Console.ReadLine()!;
+                                selectedEmployee.Department = _employeeValidation.ValidateDepartment(selectedEmployee.Department, selectedEmployee.Location);
+                                isDepartment = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("InValid Data");
+                                Console.WriteLine("Please Enter Location from given Options : ");
+                            }
+                        }
                         break;
                     case EditFieldEnum.jobTitle:
                         Utility.GetInput("Job Title");
@@ -297,7 +589,21 @@ namespace PresentationLayer
                             Console.WriteLine($"{roles[i].RoleName}");
                         }
                         selectedEmployee.JobTitle = Console.ReadLine()!;
-                        selectedEmployee.JobTitle = _employeeValidation.ValidateRole(selectedEmployee.JobTitle, "Job Title", selectedEmployee.Department, selectedEmployee.Location);
+                        bool isRole = false;
+                        while (isRole == false)
+                        {
+                            try
+                            {
+                                selectedEmployee.JobTitle = Console.ReadLine()!;
+                                selectedEmployee.JobTitle = _employeeValidation.ValidateRole(selectedEmployee.JobTitle, selectedEmployee.Department, selectedEmployee.Location);
+                                isRole = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Valid Role from given options : ");
+                            }
+                        }
                         break;                    
                     case EditFieldEnum.manager:
                         Utility.GetInput("Manager");
@@ -306,10 +612,24 @@ namespace PresentationLayer
                         {
                             Console.WriteLine(managers[i].Name);
                         }
-                        selectedEmployee.Manager = Console.ReadLine()!;
-                        if (!string.IsNullOrEmpty(selectedEmployee.Manager))
+                        selectedEmployee.Manager = string.Empty;
+                        bool isManager = false;
+                        while (isManager == false)
                         {
-                            selectedEmployee.Manager = _employeeValidation.ValidateManager(selectedEmployee.Manager, "Manager");
+                            try
+                            {
+                                selectedEmployee.Manager = Console.ReadLine()!;
+                                if (!string.IsNullOrEmpty(selectedEmployee.Manager))
+                                {
+                                    selectedEmployee.Manager = _employeeValidation.ValidateManager(selectedEmployee.Manager);
+                                }
+                                isManager = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Valid Manager Name from given options : ");
+                            }
                         }
                         break;
                     case EditFieldEnum.project:
@@ -319,10 +639,24 @@ namespace PresentationLayer
                         {
                             Console.WriteLine(projects[i].Name);
                         }
-                        selectedEmployee.Project = Console.ReadLine()!;
-                        if (!string.IsNullOrEmpty(selectedEmployee.Project))
+                        selectedEmployee.Project = string.Empty;
+                        bool isProject = false;
+                        while (isProject == false)
                         {
-                            selectedEmployee.Project = _employeeValidation.ValidateProject(selectedEmployee.Project, "Project");
+                            try
+                            {
+                                selectedEmployee.Project = Console.ReadLine()!;
+                                if (!string.IsNullOrEmpty(selectedEmployee.Project))
+                                {
+                                    selectedEmployee.Project = _employeeValidation.ValidateProject(selectedEmployee.Project);
+                                }
+                                isProject = true;
+                            }
+                            catch (Exception ex)
+                            {
+                                Console.WriteLine("Invalid Data");
+                                Console.WriteLine("Please Enter Valid Project Name from given options : ");
+                            }
                         }
                         break;
                     case EditFieldEnum.goBack:

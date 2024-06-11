@@ -12,217 +12,148 @@ namespace PresentationServiceLayer
             _renderOptionsOperation = renderOptionsOperation;
         }
 
+        //Employee Id
         public string ValidateEmployeeId(string userInput)
         {
             string patternEmpNo = "^TZ\\d{4}$";
             var UIdList = _renderOptionsOperation.GetAllIds();
-            bool isValid = true;
-            int val = 0,check=0;
+            bool isValid = false;
             for (int i = 0; i < UIdList.Count(); i++)
             {
                 if (userInput == UIdList[i].Uid)
                 {
-                    isValid = true;
-                    break;
+                    throw new InvalidDataException("Invalid data Unique Value Exception!");
                 }
             }
-            while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternEmpNo) || isValid==true)
+            if (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternEmpNo) || isValid==true)
             {
-                for (int i = 0; i < UIdList.Count(); i++)
-                {
-                    if (userInput == UIdList[i].Uid)
-                    {
-                        Console.WriteLine("Please enter correct Employee Id  : ");
-                        userInput = Console.ReadLine()!;
-                        check++;
-                    }
-                }
-                val++;
-                if (val-check==1)
-                {
-                    isValid = false;
-                    break;
-                }
+                throw new InvalidDataException("Invalid data Exception!");
             }
             
             return userInput;
         }
 
+        //Email
         public string ValidateEmail(string userInput)
         {
             string patternMail = "^[a-zA-Z0-9]+@[a-zA-Z]+\\.[a-zA-Z]+$";
-            while (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternMail))
+            if (string.IsNullOrEmpty(userInput) || !Regex.IsMatch(userInput, patternMail))
             {
-                Console.WriteLine($"Please enter correct Employee Email : ");
-                userInput = Console.ReadLine()!;
+                throw new InvalidDataException("Invalid Data");
             }
             return userInput;
         }
 
-        public string ValidateName(string userInput, string field)
+        //Name
+        public string ValidateName(string userInput)
         {
             string patternName = "^(?! )[A-Za-z ]+$";
-            while (userInput == string.Empty || !Regex.IsMatch(userInput, patternName))
+            if (userInput == string.Empty || !Regex.IsMatch(userInput, patternName))
             {
-                Console.WriteLine($"Please enter correct {field} : ");
-                userInput = Console.ReadLine()!;
+                throw new InvalidDataException("Invalid Data");
             }
             return userInput;
         }
 
-        public string ValidateLocation(string userInput, string field)
+        //Location
+        public string ValidateLocation(string userInput)
         {
             var locations = _renderOptionsOperation.GetAllLocations();
-            bool userInputLocation = false;
-            while (userInputLocation == false)
+            if (!locations.Any(location => location.Name.Equals(userInput)))
             {
-                if (locations.Any(location => location.Name.Equals(userInput)))
-                {
-                    userInputLocation = true;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter correct Location from given options : ");
-                    userInput = Console.ReadLine()!;
-                }
+                throw new InvalidDataException("InValid Data Location");
             }
-            return userInput;
+            else
+            {
+                return userInput;
+            }            
         }
-        public string ValidateManager(string userInput, string field)
+
+        //Manager
+        public string ValidateManager(string userInput)
         {
             var managers = _renderOptionsOperation.GetAllManagers();
-            bool userInputManager = false;
-            while (userInputManager == false)
+            if (!managers.Any(manager => manager.Name.Equals(userInput)))
             {
-                if (managers.Any(manager => manager.Name.Equals(userInput)))
-                {
-                    userInputManager = true;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter correct Manager from given options : ");
-                    userInput = Console.ReadLine()!;
-                }
+                throw new InvalidDataException("Invalid Data");
             }
             return userInput;
         }
 
-        public string ValidateProject(string userInput, string field)
+        //Project
+        public string ValidateProject(string userInput)
         {
             var projects = _renderOptionsOperation.GetAllProjects();
-            bool userInputProject = false;
-            while (userInputProject == false)
+            if (!projects.Any(project => project.Name.Equals(userInput)))
             {
-                if (projects.Any(project => project.Name.Equals(userInput)))
-                {
-                    userInputProject = true;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter correct Project from given options : ");
-                    userInput = Console.ReadLine()!;
-                }
+                throw new InvalidDataException("InValid Data");
             }
             return userInput;
         }
 
-        public string ValidateRole(string userInput, string field,string department,string location)
+        //Role
+        public string ValidateRole(string userInput,string department,string location)
         {
             var roles = _renderOptionsOperation.GetAllRoles(department,location);
-            bool userInputRole = false;
-            while (userInputRole == false)
+            if (!roles.Any(role => role.RoleName.Equals(userInput)))
             {
-                if (roles.Any(role => role.RoleName.Equals(userInput)))
-                {
-                    userInputRole = true;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter correct Role from given options : ");
-                    userInput = Console.ReadLine()!;
-                }
+                throw new InvalidDataException("Invalid Data");
             }
             return userInput;
         }
 
-
-        public string ValidateDepartment(string userInput, string field,string location)
+        //Department
+        public string ValidateDepartment(string userInput,string location)
         {
             var departments = _renderOptionsOperation.GetAllDepartments(location);
-            bool userInputDepartment = false;
-            while (userInputDepartment == false)
+            if (!departments.Any(department => department.Name.Equals(userInput)))
             {
-                if (departments.Any(department => department.Name.Equals(userInput)))
-                {
-                    userInputDepartment = true;
-                    break;
-                }
-                else
-                {
-                    Console.WriteLine("Please enter correct Department from given options : ");
-                    userInput = Console.ReadLine()!;
-                }
+                throw new InvalidDataException("InValid Data");
             }
             return userInput;
         }
+
+        //MobileNumber
         public string ValidateMobileNumber(string userInput)
         {
             if (!string.IsNullOrEmpty(userInput))
             {
-                while (userInput.Length != 10)
+                if (userInput.Length != 10)
                 {
-                    Console.WriteLine("Phone Number should contain atleast 10 digits : ");
-                    userInput = Console.ReadLine()!;
+                    throw new InvalidDataException("InValid Data");
                 }
             }
             return userInput;
         }
 
+        //Date
         public DateTime ValidateDate(bool isValidDate, DateTime date, DateTime currentDate)
         {
-            while (!isValidDate || currentDate < date)
+            if (currentDate < date)
             {
-                if (currentDate < date)
-                {
-                    Console.WriteLine("Date of Birth Should be prior to current date");
-
-                }
-                else
-                {
-                    Console.WriteLine($"Please enter correct Date Of Birth : ");
-                }
-                string dateString = Console.ReadLine()!;
-                isValidDate = DateTime.TryParse(dateString, out date);
-                if (string.IsNullOrEmpty(dateString))
-                {
-                    break;
-                }
+                throw new InvalidDataException("Date of Birth Should be prior to current date");
 
             }
+            else if (!isValidDate)
+            {
+                throw new InvalidDataException($"Please enter correct Date Of Birth : ");
+            }
+            throw new InvalidDataException("Date is not in Correct Format");
             return date;
         }
 
+        //JoinDate
         public DateTime ValidateJoinDate(bool isValidDate, DateTime date, DateTime? currentDate)
         {
-            while (!isValidDate || currentDate > date)
+            if (currentDate > date)
             {
-                if (currentDate > date)
-                {
-                    Console.WriteLine("The join date should follow the date of birth");
-
-                }
-                else
-                {
-                    Console.WriteLine($"Please enter correct Join Date : ");
-                }
-                string dateString = Console.ReadLine()!;
-                isValidDate = DateTime.TryParse(dateString, out date);
-
+                throw new InvalidDataException("The join date should follow the date of birth");
             }
+            else if(!isValidDate)
+            {
+                throw new InvalidDataException($"Please enter correct Join Date : ");
+            }
+            throw new InvalidDataException("Date is not in Correct Format");
             return date;
         }
     }
